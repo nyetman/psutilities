@@ -1,0 +1,37 @@
+{
+  "manifest_version":             2,
+
+  "name":                         "PS Utilities",
+  "version":                      "1",
+  "description":                  "Greeting with name of enviroment.  Shortcuts.",
+
+  "icons":                      { "16":        "icon16.png",
+                                  "32":        "icon32.png",
+                                  "48":        "icon48.png",
+                                  "128":       "icon128.png"
+                                },
+
+  "permissions":              [   "storage"
+                              ],
+
+  "content_scripts":          [ { "matches": [ "*://*/psp/*/*/*/c/*.*.*",
+                                               "*://*/psc/*/*/*/c/*.*.*",
+                                               "*://*/psp/*/*/*/h/*",
+                                               "*://*/psc/*/*/*/h/*"
+                                             ],
+                                  "css":     [ "sticky.css",
+                                               "psutilities.css"
+                                             ],
+                                  "js":      [ "jquery.min.js",
+                                               "sticky.js",
+                                               "psutilities.js"
+                                             ]
+                                }
+                              ],
+
+  "options_page":                 "options.html",
+
+  "web_accessible_resources": [   "images/close.png"
+                              ]
+
+}
