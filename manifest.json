@@ -5,10 +5,10 @@
   "version":                      "1",
   "description":                  "Greeting with name of enviroment.  Shortcuts.",
 
-  "icons":                      { "16":        "icon16.png",
-                                  "32":        "icon32.png",
-                                  "48":        "icon48.png",
-                                  "128":       "icon128.png"
+  "icons":                      { "16":        "images/icon16.png",
+                                  "32":        "images/icon32.png",
+                                  "48":        "images/icon48.png",
+                                  "128":       "images/icon128.png"
                                 },
 
   "permissions":              [   "storage"
@@ -22,9 +22,9 @@
                                   "css":     [ "sticky.css",
                                                "psutilities.css"
                                              ],
-                                  "js":      [ "jquery.min.js",
-                                               "sticky.js",
-                                               "psutilities.js"
+                                  "js":      [ "js/jquery.min.js",
+                                               "js/sticky.js",
+                                               "js/psutilities.js"
                                              ]
                                 }
                               ],
