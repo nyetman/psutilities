@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
    <head>
       <title>PS Utilities Options</title>
@@ -5,7 +6,6 @@
          h1{background:url(icon32.png) no-repeat left;margin-top:0;padding-left:1.2em}h1,h3{font-family:Cambria,serif}
       </style>
    </head>
-
    <body>
       <h1>PS Utilities Options</h1>
       <h3>Greeting</h3>
@@ -14,12 +14,39 @@
          <option value="Yes">Yes</option>
          <option value="No">No</option>
       </select>
-
+      <br>
+      <br>
+      <h3>Shortcuts</h3>
+      Enable shortcuts?
+      <select id="shortcuts">
+         <option value="Yes">Yes</option>
+         <option value="No">No</option>
+      </select>
+      <br>
+      <br>
+      Set up your shortcuts using Menu, Component and Market as well as a description of the shortcut.
+      <br>
+      <br>
+      <table border="1" id="shortcutsTable">
+         <tr>
+            <th>Menu</th>
+            <th>Component</th>
+            <th>Market</th>
+            <th>Description</th>
+         </tr>
+         <tr>
+            <td>PROCESSMONITOR</td>
+            <td>PROCESSMONITOR</td>
+            <td>GBL</td>
+            <td>Process Monitor</td>
+         </tr>
+      </table>
+      <br>
+      <button id="insertShortcutRowButton" type="button">Insert new row</button>
+      <br>
       <br>
       <div id="status"></div>
       <button id="saveButton">Save</button>
    </body>
-
    <script src="js/options.js"></script>
-
 </html>
