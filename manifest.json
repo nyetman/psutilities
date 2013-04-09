@@ -19,19 +19,22 @@
                                                "*://*/psp/*/*/*/h/*",
                                                "*://*/psc/*/*/*/h/*"
                                              ],
-                                  "css":     [ "sticky.css",
-                                               "psutilities.css"
+                                  "css":     [ "css/sticky.css",
+                                               "css/psutilities.css"
                                              ],
                                   "js":      [ "js/jquery.min.js",
                                                "js/sticky.js",
                                                "js/psutilities.js"
-                                             ]
+                                             ],
+  
+                                  "run_at": "document_end"
                                 }
                               ],
 
   "options_page":                 "options.html",
 
-  "web_accessible_resources": [   "images/close.png"
+  "web_accessible_resources": [   "js/inject.js",
+                                  "images/close.png"
                               ]
 
 }
