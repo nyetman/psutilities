@@ -130,39 +130,40 @@
                'imagePath': chrome.extension.getURL("images/close.png") // data encoded image URL (imagePath option provided by danjenkins/Sticky)
             };
             
-            	$("ul.pthnav").prepend("<li id='pthnavfavsep'>&nbsp;</li>");
-	$("ul.pthnav").prepend("<li id='pthnavbc_PSUSHORTCUTS' class='pthnavbarfldr'><a id='pthnavbca_PSUSHORTCUTS' role='menuitem' aria-haspopup='true' class='pthnavbcanchor' href=''>Shortcuts</a></li>");
-	$("#pthnavbc_PSUSHORTCUTS").append('<div id="pthnavfly_PSUSHORTCUTS" class="pthnavflyout pthnavflyoutclose" role="menu" style=""><div class="pthnavflyoutscroll" role="presentation"><ul class="pthnavscrollul"><li class="pthnavfakeli">&nbsp;</li></ul></div></div>');
-	$("#pthnavfly_PSUSHORTCUTS").append('<div class="pthnavshadow" role="presentation"><div class="pthnavscrollup" role="presentation">&nbsp;</div><div class="pthnavscroll" role="menu" style="overflow: hidden; height: auto;"><ul id="pthnavpsushortcuts" style="position: relative; top: 0px;"></ul></div><div class="pthnavscrolldown">&nbsp;</div></div>');
+            $("ul.pthnav").prepend("<li id='pthnavfavsep'>&nbsp;</li>");
+            $("ul.pthnav").prepend("<li id='pthnavbc_PSUSHORTCUTS' class='pthnavbarfldr'><a id='pthnavbca_PSUSHORTCUTS' role='menuitem' aria-haspopup='true' class='pthnavbcanchor' href=''>Shortcuts</a></li>");
+            $("#pthnavbc_PSUSHORTCUTS").append('<div id="pthnavfly_PSUSHORTCUTS" class="pthnavflyout pthnavflyoutclose" role="menu" style=""><div class="pthnavflyoutscroll" role="presentation"><ul class="pthnavscrollul"><li class="pthnavfakeli">&nbsp;</li></ul></div></div>');
+          	$("#pthnavfly_PSUSHORTCUTS").append('<div class="pthnavshadow" role="presentation"><div class="pthnavscrollup" role="presentation">&nbsp;</div><div class="pthnavscroll" role="menu" style="overflow: hidden; height: auto;"><ul id="pthnavpsushortcuts" style="position: relative; top: 0px;"></ul></div><div class="pthnavscrolldown">&nbsp;</div></div>');
+          
+            // build up menu
+            var $ul = $("#pthnavfly_PSUSHORTCUTS ul#pthnavpsushortcuts");
+          
+            for (var i = 0; i < menuItems.length; i++) {
+              // reconstruct urls for defined compoents
+              var url = baseURL;
+              url += '/psp';                       // force portal servlet
+              url += '/' + site + '_newwin';       // force new window
+              url += '/' + portal;
+              url += '/' + node;
+              url += '/c';
+              url += '/' + menuItems[i].menu;
+              url += '.' + menuItems[i].component;
+              url += '.' + menuItems[i].market;
+          
+              var $li = $('<li class="pthnavcref pthnav-mouse" id="crefli_PSUSHORTCUT' + i + '"><a href="' + url + '" role="menuitem">' + menuItems[i].descr + '</a><div class="pthnavcrefimg">&nbsp;</div></li>');
+          
+              $($ul).append($li);
+            }
+          
+            var s = document.createElement('script');
+            s.src = chrome.extension.getURL("js/inject.js");
+            s.onload = function() {
+              this.parentNode.removeChild(this);
+            };
+            (document.head||document.documentElement).appendChild(s);
 
-  // build up menu
-  var $ul = $("#pthnavfly_PSUSHORTCUTS ul#pthnavpsushortcuts");
-
-  for (var i = 0; i < menuItems.length; i++) {
-    // reconstruct urls for defined compoents
-    var url = baseURL;
-    url += '/psp';                       // force portal servlet
-    url += '/' + site + '_newwin';       // force new window
-    url += '/' + portal;
-    url += '/' + node;
-    url += '/c';
-    url += '/' + menuItems[i].menu;
-    url += '.' + menuItems[i].component;
-    url += '.' + menuItems[i].market;
-
-    var $li = $('<li class="pthnavcref pthnav-mouse" id="crefli_PSUSHORTCUT' + i + '"><a href="' + url + '" role="menuitem">' + menuItems[i].descr + '</a><div class="pthnavcrefimg">&nbsp;</div></li>');
-
-    $($ul).append($li);
-  }
-
-var s = document.createElement('script');
-s.src = chrome.extension.getURL("js/inject.js");
-s.onload = function() {
-    this.parentNode.removeChild(this);
-};
-(document.head||document.documentElement).appendChild(s);
-
-
+            
+            
             $(document).ready(function() {
 
                $shortcuts.click(function() {
@@ -183,6 +184,8 @@ s.onload = function() {
    //
    // SHORTCUTS END
    //
+
+
 
 /* ===== Click on an element (borrowed from Facebook Fixer, @namespace http://userscripts.org/people/14536) ===== */
 function click(elm) {
