@@ -14,8 +14,8 @@
   "permissions":              [   "storage"
                               ],
 
-  "content_scripts":          [ { "matches": [ "*://*/psp/*/*/*/c/*.*.*",
-                                               "*://*/psc/*/*/*/c/*.*.*",
+  "content_scripts":          [ { "matches": [ "*://*/psp/*/*/*/[c|s]/*.*.*",
+                                               "*://*/psc/*/*/*/[c|s]/*.*.*",
                                                "*://*/psp/*/*/*/h/*",
                                                "*://*/psc/*/*/*/h/*"
                                              ],

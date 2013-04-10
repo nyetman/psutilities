@@ -142,7 +142,7 @@
               // reconstruct urls for defined compoents
               var url = baseURL;
               url += '/psp';                       // force portal servlet
-              url += '/' + site + '_newwin';       // force new window
+              url += '/' + site;       // force new window
               url += '/' + portal;
               url += '/' + node;
               url += '/c';
