@@ -5,10 +5,50 @@ function insertShortcutRow() {
    var cell2 = row.insertCell(1);
    var cell3 = row.insertCell(2);
    var cell4 = row.insertCell(3);
-   cell1.innerHTML = "New";
-   cell2.innerHTML = "New";
-   cell3.innerHTML = "New";
-   cell4.innerHTML = "New";
+   var cell5 = row.insertCell(4);
+   cell1.innerHTML = " ";
+   cell2.innerHTML = " ";
+   cell3.innerHTML = " ";
+   cell4.innerHTML = " ";
+   cell5.innerHTML = " ";
+   cell1.contentEditable = "true";
+   cell2.contentEditable = "true";
+   cell3.contentEditable = "true";
+   cell4.contentEditable = "true";
+   cell5.contentEditable = "true";
+}
+
+function buildHtmlTable(mylist) {
+    var columns = addAllColumnHeaders(mylist);
+
+    for (var i = 0 ; i < mylist.length ; i++) {
+        var row$ = $('<tr/>');
+        for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
+            var cellValue = mylist[i][columns[colIndex]];
+
+            if (cellValue == null) { cellValue = ""; }
+
+            row$.append($('<td contentEditable="true" />').html(cellValue));
+        }
+        $("#shortcutsTable").append(row$);
+    }
+}
+
+// Adds column headers to array which is returned.
+function addAllColumnHeaders(mylist)
+{
+    var columnSet = [];
+
+    for (var i = 0 ; i < mylist.length ; i++) {
+        var rowHash = mylist[i];
+        for (var key in rowHash) {
+            if ($.inArray(key, columnSet) == -1){
+                columnSet.push(key);
+            }
+        }
+    }
+
+    return columnSet;
 }
 
 function saveOptions() {
@@ -22,6 +62,10 @@ function saveOptions() {
    var shortcuts = select.children[select.selectedIndex].value;
 
    chrome.storage.sync.set({'shortcutsOption': shortcuts}, function() {
+   });
+
+   var table = $('#shortcutsTable').tableToJSON();
+   chrome.storage.sync.set({'shortcutstable': table}, function() {
    });
 
    var status = document.getElementById("status");
@@ -52,6 +96,11 @@ function restoreOptions() {
       else {
          document.getElementById("shortcuts").value = greetingvalue;
       }
+   });
+
+   chrome.storage.sync.get('shortcutstable', function(r) {
+      var shortcutstable = r['shortcutstable'];
+      buildHtmlTable(shortcutstable);
    });
 }
 
