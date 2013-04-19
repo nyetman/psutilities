@@ -18,37 +18,21 @@ function insertShortcutRow() {
    cell5.contentEditable = "true";
 }
 
-function buildHtmlTable(mylist) {
-    var columns = addAllColumnHeaders(mylist);
-
-    for (var i = 0 ; i < mylist.length ; i++) {
-        var row$ = $('<tr/>');
-        for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
-            var cellValue = mylist[i][columns[colIndex]];
-
-            if (cellValue == null) { cellValue = ""; }
-
-            row$.append($('<td contentEditable="true" />').html(cellValue));
-        }
-        $("#shortcutsTable").append(row$);
-    }
+function buildShortcutsTable(shortcutsTable) {
+   for (var i = 0 ; i < shortcutsTable.length ; i++) {
+      var row$ = $('<tr/>');
+      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Menu)));
+      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Component)));
+      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Market)));
+      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Parameters)));
+      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Description)));
+      $("#shortcutsTable").append(row$);
+   }
 }
 
-// Adds column headers to array which is returned.
-function addAllColumnHeaders(mylist)
-{
-    var columnSet = [];
-
-    for (var i = 0 ; i < mylist.length ; i++) {
-        var rowHash = mylist[i];
-        for (var key in rowHash) {
-            if ($.inArray(key, columnSet) == -1){
-                columnSet.push(key);
-            }
-        }
-    }
-
-    return columnSet;
+function insertcell(arrayValue) {
+   if (arrayValue == null) { arrayValue = ""; }
+   return arrayValue;
 }
 
 function saveOptions() {
@@ -100,7 +84,7 @@ function restoreOptions() {
 
    chrome.storage.sync.get('shortcutstable', function(r) {
       var shortcutstable = r['shortcutstable'];
-      buildHtmlTable(shortcutstable);
+      buildShortcutsTable(shortcutstable);
    });
 }
 

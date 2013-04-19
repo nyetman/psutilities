@@ -49,21 +49,6 @@
 
          var $shortcuts = $('#pthdr2container .shortcuts');
 
-         // Array of Menu/Component/Markets/Descriptions of Peoplesoft "menuItem" objects
-         var menuItems = [];
-
-         menuItems.add = function(menu, component, market, descr) {
-            var self = this;
-            self.push({
-               menu: menu,
-               component: component,
-               market: market,
-               descr: descr,
-               speedKey: "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charCodeAt(self.length)
-            });
-            return self;
-         }
-
          //        .../ps[c|p] /site     /portal   /node     /c /menuname   .component  .market
          var urlRe = /(.*)\/(ps[cp])\/([^\/]*)\/([^\/]*)\/([^\/]*)\/c\/([^\/\.]*)\.([^\/\.]*)\.([^\?]*).*/gi;
          var urlResult = urlRe.exec(window.location.href);
@@ -84,41 +69,28 @@
             var portal = urlResult[4];
             var node = urlResult[5];
 
-            // Add Menu/Component/Markets/Description menuItems...
-            menuItems
-               .add('UTILITIES', 'PEOPLECODE_TRACE', 'GBL', 'PeopleTools: Trace PeopleCode')
-               .add('UTILITIES', 'TRACE_SQL', 'GBL', 'PeopleTools: Trace SQL')
-               .add('UTILITIES', 'URL_TABLE', 'GBL', 'PeopleTools: URLs')
-               .add('UTILITIES', 'MESSAGE_CATALOG1', 'GBL', 'PeopleTools: Message Catalogue')
-               .add('PROCESS_SCHEDULER', 'PRCSDEFN', 'GBL', 'Processes:   Process Definitions')
-               .add('PROCESSMONITOR', 'PROCESSMONITOR', 'GBL', 'Processes:   Process Monitor')
-               .add('MAINTAIN_SECURITY', 'USERMAINT', 'GBL', 'Security:    User Profiles')
-               .add('MAINTAIN_SECURITY', 'ACCESS_CNTRL_LISTX', 'GBL', 'Security:    Permission Lists')
-               .add('MAINTAIN_SECURITY', 'ROLEMAINT', 'GBL', 'Security:    Roles')
-               .add('MAINTAIN_SECURITY', 'PSTREEMGRACC', 'GBL', 'Query:       Query Access Manager')
-               .add('QUERY_MANAGER', 'QUERY_MANAGER', 'GBL', 'Query:       Query Manager')
-               .add('PORTAL_ADMIN', 'PORTAL_OBJ_LIST', 'GBL', 'Portal:      Structure and Content')
-               .add('UOG_MIG_REQUEST', 'UM_MIGRATION_SRCH', 'GBL', 'Migration:   Migration Search')
-            ;
-
             // build up menu
             var ul = $('<ul class="pscs-ul">');
 
-            for (var i = 0; i < menuItems.length; i++) {
-               // reconstruct urls for defined compoents
-               var url = baseURL;
-               url += '/psp'; // force portal servlet
-               url += '/' + site + '_newwin'; // force new window
-               url += '/' + portal;
-               url += '/' + node;
-               url += '/c';
-               url += '/' + menuItems[i].menu;
-               url += '.' + menuItems[i].component;
-               url += '.' + menuItems[i].market;
-               var li = $('<li class="pscs-li"><a target="_blank" href="' + url + '">' + String.fromCharCode(menuItems[i].speedKey) + ' : ' + menuItems[i].descr + '</a></li>');
-               $(li).attr('speedKey', menuItems[i].speedKey);
-               $(ul).append(li);
-            }
+            // COMMENT OUT FOR NOW, BUT THIS GETS THE SHORTCUTS TABLE FROM STORAGE
+            chrome.storage.sync.get('shortcutstable', function(r) {
+               var shortcutstable = r['shortcutstable'];
+               for (var i = 0 ; i < shortcutstable.length ; i++) {
+                  // reconstruct urls for defined compoents
+                  var url = baseURL;
+                  url += '/psp'; // force portal servlet
+                  url += '/' + site + '_newwin'; // force new window
+                  url += '/' + portal;
+                  url += '/' + node;
+                  url += '/c';
+                  url += '/' + shortcutstable[i].Menu;
+                  url += '.' + shortcutstable[i].Component;
+                  url += '.' + shortcutstable[i].Market;
+                  if (shortcutstable[i].Parameters != "") {url += '?' + shortcutstable[i].Parameters}
+                  var li = $('<li class="pscs-li"><a target="_blank" href="' + url + '">' + shortcutstable[i].Description + '</a></li>');
+                  $(ul).append(li);
+               }
+            });
 
             var sticky_div = $('<div>').append('<div class="pscs-title">Shortcuts</div>').append(ul);
             sticky_div.hide().appendTo('head');
@@ -126,7 +98,7 @@
             var sticky_options = {
                'speed': 300, // animations: fast, slow, or integer
                'duplicates': false, // true or false
-               'autoclose': 100000, // integer or false
+               'autoclose': 5000, // integer or false
                'imagePath': chrome.extension.getURL("images/close.png") // data encoded image URL (imagePath option provided by danjenkins/Sticky)
             };
             
@@ -162,8 +134,6 @@
             };
             (document.head||document.documentElement).appendChild(s);
 
-            
-            
             $(document).ready(function() {
 
                $shortcuts.click(function() {
@@ -184,8 +154,6 @@
    //
    // SHORTCUTS END
    //
-
-
 
 /* ===== Click on an element (borrowed from Facebook Fixer, @namespace http://userscripts.org/people/14536) ===== */
 function click(elm) {
