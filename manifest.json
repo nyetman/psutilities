@@ -23,6 +23,7 @@
                                                "css/psutilities.css"
                                              ],
                                   "js":      [ "js/jquery.min.js",
+                                               "js/jquery.tabletojson.js",
                                                "js/sticky.js",
                                                "js/psutilities.js"
                                              ],

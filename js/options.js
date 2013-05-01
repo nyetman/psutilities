@@ -6,16 +6,20 @@ function insertShortcutRow() {
    var cell3 = row.insertCell(2);
    var cell4 = row.insertCell(3);
    var cell5 = row.insertCell(4);
+   var cell6 = row.insertCell(5);
    cell1.innerHTML = " ";
    cell2.innerHTML = " ";
    cell3.innerHTML = " ";
    cell4.innerHTML = " ";
    cell5.innerHTML = " ";
+   //cell6.innerHTML = "<button id='deleteRowButton' title='Remove this shortcut'>-</button>";
+   cell6.innerHTML = "<a href='#' Title='Remove Shortcut' id='removeShortcut'><img src='images/delete.png' alt='Remove'/></a>"
    cell1.contentEditable = "true";
    cell2.contentEditable = "true";
    cell3.contentEditable = "true";
    cell4.contentEditable = "true";
    cell5.contentEditable = "true";
+   cell6.style.border = "none";
 }
 
 function buildShortcutsTable(shortcutsTable) {
@@ -26,6 +30,7 @@ function buildShortcutsTable(shortcutsTable) {
       row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Market)));
       row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Parameters)));
       row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Description)));
+      row$.append($('<td style="border:none;"><a href="#" Title="Remove Shortcut" id="removeShortcut"><img src="images/delete.png" alt="Remove Shortcut"/></a>'));
       $("#shortcutsTable").append(row$);
    }
 }
@@ -88,8 +93,14 @@ function restoreOptions() {
    });
 }
 
-document.addEventListener('DOMContentLoaded', restoreOptions);
+function deleteShortcutRow() {
+   alert("Deleting row");
+}
+
 document.getElementById("saveButton").addEventListener('click', saveOptions);
 document.addEventListener('DOMContentLoaded', function() {
+   restoreOptions();
    document.getElementById("insertShortcutRowButton").addEventListener('click', insertShortcutRow);
-});
+   document.getElementById("removeShortcut").addEventListener('click', deleteShortcutRow);
+})
+;

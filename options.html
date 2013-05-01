@@ -5,6 +5,7 @@
       <style type="text/css">
          h1{background:url(images/icon32.png) no-repeat left;margin-top:0;padding-left:1.2em}h1,h3{font-family:Cambria,serif}
       </style>
+      <link rel="stylesheet" type="text/css" href="css/options.css" />
    </head>
    <body>
       <h1>PS Utilities Options</h1>
@@ -27,21 +28,21 @@
       Set up your shortcuts using Menu, Component and Market as well as a description of the shortcut.
       <br>
       <br>
-      <table border="1" id="shortcutsTable">
+      <table class="gridtable" id="shortcutsTable">
          <tr>
-            <th>Menu</th>
-            <th>Component</th>
-            <th>Market</th>
-            <th>Parameters</th>
-            <th>Description</th>
+            <th style="width: 222px">Menu</th>
+            <th style="width: 142px">Component</th>
+            <th style="width:  45px">Market</th>
+            <th style="width: 508px">Parameters</th>
+            <th style="width: 323px">Description</th>
          </tr>
       </table>
       <br>
-      <button id="insertShortcutRowButton" type="button">Insert new row</button>
+      <button id="insertShortcutRowButton" class="psu_button" type="button">Insert new row</button>
       <br>
       <br>
       <div id="status"></div>
-      <button id="saveButton">Save</button>
+      <button id="saveButton" class="psu_button">Save</button>
    </body>
    <script src="js/jquery.min.js"></script>
    <script src="js/jquery.tabletojson.js"></script>
