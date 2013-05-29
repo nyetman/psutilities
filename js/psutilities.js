@@ -45,9 +45,6 @@
       var shortcutsvalue = r['shortcutsOption'];
 
       if (shortcutsvalue == 'Yes') {
-         $("div#pthdr2container").append("<div id='pthdr2shortcuts'><span class='shortcuts'>Shortcuts</span></div>");
-
-         var $shortcuts = $('#pthdr2container .shortcuts');
 
          //        .../ps[c|p] /site     /portal   /node     /c /menuname   .component  .market
          var urlRe = /(.*)\/(ps[cp])\/([^\/]*)\/([^\/]*)\/([^\/]*)\/c\/([^\/\.]*)\.([^\/\.]*)\.([^\?]*).*/gi;
@@ -69,84 +66,54 @@
             var portal = urlResult[4];
             var node = urlResult[5];
 
-            // build up menu
-            var ul = $('<ul class="pscs-ul">');
+            $("div#pthdr2container").append("<div id='pthdr2myshortcuts'><ul class='dropdown'><li id='dropdownlist'>My Shortcuts<ul class='sub_menu'>");
 
-            // COMMENT OUT FOR NOW, BUT THIS GETS THE SHORTCUTS TABLE FROM STORAGE
+            var $myshortcuts = $('.sub_menu');
+
+            // Get shortcuts from storage
             chrome.storage.sync.get('shortcutstable', function(r) {
-               var shortcutstable = r['shortcutstable'];
-               for (var i = 0 ; i < shortcutstable.length ; i++) {
-                  // reconstruct urls for defined compoents
-                  var url = baseURL;
-                  url += '/psp'; // force portal servlet
-                  url += '/' + site + '_newwin'; // force new window
-                  url += '/' + portal;
-                  url += '/' + node;
-                  url += '/c';
-                  url += '/' + shortcutstable[i].Menu;
-                  url += '.' + shortcutstable[i].Component;
-                  url += '.' + shortcutstable[i].Market;
-                  if (shortcutstable[i].Parameters != "") {url += '?' + shortcutstable[i].Parameters}
-                  var li = $('<li class="pscs-li"><a target="_blank" href="' + url + '">' + shortcutstable[i].Description + '</a></li>');
-                  $(ul).append(li);
+               var shortcutstablex = r['shortcutstable'];
+
+               // Create array to hold groups
+               var arrGroups = new Array();
+
+               // Loop through shortcuts and get unique list of groups
+               for (var i = 0 ; i < shortcutstablex.length ; i++) {
+                  if (shortcutstablex[i].Group != "") {
+                     if ($.inArray(shortcutstablex[i].Group, arrGroups) === -1) {
+                        arrGroups.push(shortcutstablex[i].Group);
+                        $myshortcuts.append("<li>" + shortcutstablex[i].Group + "&gt;&gt;<ul id='psutil_" + shortcutstablex[i].Group.replace(/\s+/g, '') + "'>");
+                     }
+                  }
                }
-            });
 
-            var sticky_div = $('<div>').append('<div class="pscs-title">Shortcuts</div>').append(ul);
-            sticky_div.hide().appendTo('head');
+               for (var i = 0 ; i < shortcutstablex.length ; i++) {
+                  // reconstruct urls for defined compoents
+                  var urlx = baseURL;
+                  urlx += '/psp'; // force portal servlet
+                  urlx += '/' + site + '_newwin'; // force new window
+                  urlx += '/' + portal;
+                  urlx += '/' + node;
+                  urlx += '/c';
+                  urlx += '/' + shortcutstablex[i].Menu;
+                  urlx += '.' + shortcutstablex[i].Component;
+                  urlx += '.' + shortcutstablex[i].Market;
 
-            var sticky_options = {
-               'speed': 300, // animations: fast, slow, or integer
-               'duplicates': false, // true or false
-               'autoclose': 5000, // integer or false
-               'imagePath': chrome.extension.getURL("images/close.png") // data encoded image URL (imagePath option provided by danjenkins/Sticky)
-            };
-            
-            $("ul.pthnav").prepend("<li id='pthnavfavsep'>&nbsp;</li>");
-            $("ul.pthnav").prepend("<li id='pthnavbc_PSUSHORTCUTS' class='pthnavbarfldr'><a id='pthnavbca_PSUSHORTCUTS' role='menuitem' aria-haspopup='true' class='pthnavbcanchor' href=''>Shortcuts</a></li>");
-            $("#pthnavbc_PSUSHORTCUTS").append('<div id="pthnavfly_PSUSHORTCUTS" class="pthnavflyout pthnavflyoutclose" role="menu" style=""><div class="pthnavflyoutscroll" role="presentation"><ul class="pthnavscrollul"><li class="pthnavfakeli">&nbsp;</li></ul></div></div>');
-          	$("#pthnavfly_PSUSHORTCUTS").append('<div class="pthnavshadow" role="presentation"><div class="pthnavscrollup" role="presentation">&nbsp;</div><div class="pthnavscroll" role="menu" style="overflow: hidden; height: auto;"><ul id="pthnavpsushortcuts" style="position: relative; top: 0px;"></ul></div><div class="pthnavscrolldown">&nbsp;</div></div>');
-          
-            // build up menu
-            var $ul = $("#pthnavfly_PSUSHORTCUTS ul#pthnavpsushortcuts");
-          
-            for (var i = 0; i < menuItems.length; i++) {
-              // reconstruct urls for defined compoents
-              var url = baseURL;
-              url += '/psp';                       // force portal servlet
-              url += '/' + site;       // force new window
-              url += '/' + portal;
-              url += '/' + node;
-              url += '/c';
-              url += '/' + menuItems[i].menu;
-              url += '.' + menuItems[i].component;
-              url += '.' + menuItems[i].market;
-          
-              var $li = $('<li class="pthnavcref pthnav-mouse" id="crefli_PSUSHORTCUT' + i + '"><a href="' + url + '" role="menuitem">' + menuItems[i].descr + '</a><div class="pthnavcrefimg">&nbsp;</div></li>');
-          
-              $($ul).append($li);
-            }
-          
-            var s = document.createElement('script');
-            s.src = chrome.extension.getURL("js/inject.js");
-            s.onload = function() {
-              this.parentNode.removeChild(this);
-            };
-            (document.head||document.documentElement).appendChild(s);
+                  if (shortcutstablex[i].Parameters != "") {
+                     urlx += '?' + shortcutstablex[i].Parameters
+                  }
 
-            $(document).ready(function() {
+                  var lix = $('<li><a target="_blank" href="' + urlx + '">' + shortcutstablex[i].Description + '</a></li>');
 
-               $shortcuts.click(function() {
-                  var s = $('.sticky:visible');
+                  if (shortcutstablex[i].Group != "") {
+                     var $shortcuttemp = $('#psutil_' + shortcutstablex[i].Group.replace(/\s+/g, ''));
 
-                  // hide if already visible
-                  if ($(s).size()) {
-                     $(s).hide();
+                     $shortcuttemp.append(lix);
                   }
                   else {
-                     $(sticky_div).sticky(false, sticky_options);
+                     $myshortcuts.prepend(lix);
                   }
-               });
+               }
             });
          }
       }
@@ -155,9 +122,9 @@
    // SHORTCUTS END
    //
 
-/* ===== Click on an element (borrowed from Facebook Fixer, @namespace http://userscripts.org/people/14536) ===== */
 function click(elm) {
    var evt = document.createEvent('MouseEvents');
    evt.initMouseEvent('click', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, 0, null);
    elm.dispatchEvent(evt);
 }
+

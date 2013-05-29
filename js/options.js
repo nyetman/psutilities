@@ -7,31 +7,50 @@ function insertShortcutRow() {
    var cell4 = row.insertCell(3);
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
+   var cell7 = row.insertCell(6);
    cell1.innerHTML = " ";
    cell2.innerHTML = " ";
    cell3.innerHTML = " ";
    cell4.innerHTML = " ";
    cell5.innerHTML = " ";
-   //cell6.innerHTML = "<button id='deleteRowButton' title='Remove this shortcut'>-</button>";
-   cell6.innerHTML = "<a href='#' Title='Remove Shortcut' id='removeShortcut'><img src='images/delete.png' alt='Remove'/></a>"
+   cell6.innerHTML = " ";
+   cell7.innerHTML = "<a href='#' Title='Remove Shortcut' id='removeShortcut'><img src='images/delete.png' alt='Remove'/></a>"
    cell1.contentEditable = "true";
    cell2.contentEditable = "true";
    cell3.contentEditable = "true";
    cell4.contentEditable = "true";
    cell5.contentEditable = "true";
-   cell6.style.border = "none";
+   cell6.contentEditable = "true";
+   cell7.style.border = "none";
+   cell7.addEventListener('click', deleteShortcutRow);
 }
 
 function buildShortcutsTable(shortcutsTable) {
    for (var i = 0 ; i < shortcutsTable.length ; i++) {
-      var row$ = $('<tr/>');
-      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Menu)));
-      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Component)));
-      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Market)));
-      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Parameters)));
-      row$.append($('<td contentEditable="true" />').html(insertcell(shortcutsTable[i].Description)));
-      row$.append($('<td style="border:none;"><a href="#" Title="Remove Shortcut" id="removeShortcut"><img src="images/delete.png" alt="Remove Shortcut"/></a>'));
-      $("#shortcutsTable").append(row$);
+      var table = document.getElementById("shortcutsTable");
+      var row = table.insertRow(-1);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+      var cell5 = row.insertCell(4);
+      var cell6 = row.insertCell(5);
+      var cell7 = row.insertCell(6);
+      cell1.innerHTML = shortcutsTable[i].Menu;
+      cell2.innerHTML = shortcutsTable[i].Component;
+      cell3.innerHTML = shortcutsTable[i].Market;
+      cell4.innerHTML = shortcutsTable[i].Parameters;
+      cell5.innerHTML = shortcutsTable[i].Group;
+      cell6.innerHTML = shortcutsTable[i].Description;
+      cell7.innerHTML = "<a href='#' Title='Remove Shortcut' id='removeShortcut'><img src='images/delete.png' alt='Remove'/></a>"
+      cell1.contentEditable = "true";
+      cell2.contentEditable = "true";
+      cell3.contentEditable = "true";
+      cell4.contentEditable = "true";
+      cell5.contentEditable = "true";
+      cell6.contentEditable = "true";
+      cell7.style.border = "none";
+      cell7.addEventListener('click', deleteShortcutRow);
    }
 }
 
@@ -54,6 +73,12 @@ function saveOptions() {
    });
 
    var table = $('#shortcutsTable').tableToJSON();
+
+    table.sort(function(a, b){
+        //note the array comparison [...] < [...]
+        return [a.Group, a.Description] < [b.Group, b.Description] ? -1 : 1;
+    });
+
    chrome.storage.sync.set({'shortcutstable': table}, function() {
    });
 
@@ -68,22 +93,22 @@ function saveOptions() {
 
 function restoreOptions() {
    chrome.storage.sync.get('greetingOption', function(r) {
-      var greetingvalue = r['greetingOption'];
-      if (!greetingvalue) {
+      var greetingoptionvalue = r['greetingOption'];
+      if (!greetingoptionvalue) {
          document.getElementById("greeting").value = 'No';
       }
       else {
-         document.getElementById("greeting").value = greetingvalue;
+         document.getElementById("greeting").value = greetingoptionvalue;
       }
    });
 
    chrome.storage.sync.get('shortcutsOption', function(r) {
-      var greetingvalue = r['shortcutsOption'];
-      if (!greetingvalue) {
+      var shortcutsoptionvalue = r['shortcutsOption'];
+      if (!shortcutsoptionvalue) {
          document.getElementById("shortcuts").value = 'No';
       }
       else {
-         document.getElementById("shortcuts").value = greetingvalue;
+         document.getElementById("shortcuts").value = shortcutsoptionvalue;
       }
    });
 
@@ -93,14 +118,13 @@ function restoreOptions() {
    });
 }
 
-function deleteShortcutRow() {
-   alert("Deleting row");
+function deleteShortcutRow(e) {
+   document.getElementById("shortcutsTable").deleteRow(this.parentNode.rowIndex);
 }
 
 document.getElementById("saveButton").addEventListener('click', saveOptions);
 document.addEventListener('DOMContentLoaded', function() {
    restoreOptions();
    document.getElementById("insertShortcutRowButton").addEventListener('click', insertShortcutRow);
-   document.getElementById("removeShortcut").addEventListener('click', deleteShortcutRow);
 })
 ;

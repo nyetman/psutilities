@@ -14,28 +14,21 @@
   "permissions":              [   "storage"
                               ],
 
-  "content_scripts":          [ { "matches": [ "*://*/psp/*/*/*/[c|s]/*.*.*",
-                                               "*://*/psc/*/*/*/[c|s]/*.*.*",
+  "content_scripts":          [ { "matches": [ "*://*/psp/*/*/*/c/*.*.*",
+                                               "*://*/psc/*/*/*/c/*.*.*",
                                                "*://*/psp/*/*/*/h/*",
                                                "*://*/psc/*/*/*/h/*"
                                              ],
-                                  "css":     [ "css/sticky.css",
-                                               "css/psutilities.css"
+                                  "css":     [ "css/psutilities.css"
                                              ],
                                   "js":      [ "js/jquery.min.js",
                                                "js/jquery.tabletojson.js",
-                                               "js/sticky.js",
+                                               "js/jquery.dropdownPlain.js",
                                                "js/psutilities.js"
-                                             ],
-  
-                                  "run_at": "document_end"
+                                             ]
                                 }
                               ],
 
-  "options_page":                 "options.html",
-
-  "web_accessible_resources": [   "js/inject.js",
-                                  "images/close.png"
-                              ]
+  "options_page":                 "options.html"
 
 }
