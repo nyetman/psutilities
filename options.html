@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <html>
    <head>
       <title>PS Utilities Options</title>
@@ -8,7 +8,7 @@
       </style>
    </head>
    <body>
-      <h1>PS Utilities Options</h1>
+      <h1>PS Utilities Options (BETA)</h1>
       <h3>Greeting</h3>
       Show the site name (as it appears in the URL) as a greeting in the header?
       <select id="greeting">
@@ -42,10 +42,17 @@
       <button id="insertShortcutRowButton" class="psu_button" type="button">Insert new row</button>
       <br>
       <br>
+      <h4>Import/Export Shortcuts</h4>
+      <button id="importButton" class="psu_button">Import</button>
+      <button id="exportButton" class="psu_button">Export</button>
+      <br>
+      <textarea id="importExportArea" style="overflow:auto; height:250px; width:1200px; border-width: 1px; padding: 2px; border-style: solid; border-color: #666; background-color: #FFF;"></textarea>
+      <br>
       <div id="status"></div>
       <button id="saveButton" class="psu_button">Save</button>
    </body>
    <script src="js/jquery.min.js"></script>
    <script src="js/jquery.tabletojson.js"></script>
+   <script src="js/jquery.csv-0.71.js"></script>
    <script src="js/options.js"></script>
 </html>

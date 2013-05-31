@@ -1,3 +1,7 @@
+$( document ).ready(function() {
+
+   $("body").prepend("<div class='psutil psutilhidden' id='psutil' draggable='true'>");
+   $('#psutil').drags();
    //
    // GREETING BEGIN
    //
@@ -5,32 +9,25 @@
       var greetingvalue = r['greetingOption'];
 
       if (greetingvalue == 'Yes') {
+
+         $("#psutil").removeClass("psutilhidden");
+
          var locStr = window.location.href;
 
          //Find psp in URL
          var envBegin = locStr.search('psp');
 
-         //Substring the URL starting 4 positions after psp (this should be where the environment starts
+         //Substring the URL starting 4 positions after psp (this should be where the environment starts)
          var tempLocStr = locStr.substring(envBegin + 4);
 
-         //Split the URL by / and get everything to the left of the first / (this should be our entire environment name
+         //Split the URL by / and get everything to the left of the first / (this should be our entire environment name)
          var envString = tempLocStr.split('/')[0];
 
          //If multiple windows are open, they will have _ followed by a number appended to the environment, remove this
          var finalEnv = envString.split('_')[0];
 
-         //If greeting doesn't exist in header then add it
-         if ($("#pthdr2greeting").length == 0) {
-            $("div#pthdr2container").append("<div id='pthdr2greeting'><span class='greeting'>&nbsp;</span></div>");
-         }
-
-         //Select greeting in the header
-         var $greet = $('#pthdr2greeting .greeting');
-
-         //Populate greeting in header with environment
-         if ($.trim($greet.text()) == '') {
-            $greet.text(finalEnv);
-         }
+         $('.psutil').append("<div class='psutilgreet psutiltabs'>");
+         $('.psutilgreet').text(finalEnv);
       }
    });
 
@@ -45,6 +42,8 @@
       var shortcutsvalue = r['shortcutsOption'];
 
       if (shortcutsvalue == 'Yes') {
+
+         $("#psutil").removeClass("psutilhidden");
 
          //        .../ps[c|p] /site     /portal   /node     /c /menuname   .component  .market
          var urlRe = /(.*)\/(ps[cp])\/([^\/]*)\/([^\/]*)\/([^\/]*)\/c\/([^\/\.]*)\.([^\/\.]*)\.([^\?]*).*/gi;
@@ -66,8 +65,7 @@
             var portal = urlResult[4];
             var node = urlResult[5];
 
-            $("div#pthdr2container").append("<div id='pthdr2myshortcuts'><ul class='dropdown'><li id='dropdownlist'>My Shortcuts<ul class='sub_menu'>");
-
+            $('.psutil').append("<div class='psutilshortcuts psutiltabs'><ul class='dropdown'><li id='dropdownlist'>My Shortcuts<ul class='sub_menu'>");
             var $myshortcuts = $('.sub_menu');
 
             // Get shortcuts from storage
@@ -82,7 +80,7 @@
                   if (shortcutstablex[i].Group != "") {
                      if ($.inArray(shortcutstablex[i].Group, arrGroups) === -1) {
                         arrGroups.push(shortcutstablex[i].Group);
-                        $myshortcuts.append("<li>" + shortcutstablex[i].Group + "&gt;&gt;<ul id='psutil_" + shortcutstablex[i].Group.replace(/\s+/g, '') + "'>");
+                        $myshortcuts.append("<li>" + shortcutstablex[i].Group + "&gt;&gt;<ul id='psutilgrp_" + shortcutstablex[i].Group.replace(/\s+/g, '') + "'>");
                      }
                   }
                }
@@ -106,7 +104,7 @@
                   var lix = $('<li><a target="_blank" href="' + urlx + '">' + shortcutstablex[i].Description + '</a></li>');
 
                   if (shortcutstablex[i].Group != "") {
-                     var $shortcuttemp = $('#psutil_' + shortcutstablex[i].Group.replace(/\s+/g, ''));
+                     var $shortcuttemp = $('#psutilgrp_' + shortcutstablex[i].Group.replace(/\s+/g, ''));
 
                      $shortcuttemp.append(lix);
                   }
@@ -121,10 +119,4 @@
    //
    // SHORTCUTS END
    //
-
-function click(elm) {
-   var evt = document.createEvent('MouseEvents');
-   evt.initMouseEvent('click', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, 0, null);
-   elm.dispatchEvent(evt);
-}
-
+});

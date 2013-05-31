@@ -122,9 +122,40 @@ function deleteShortcutRow(e) {
    document.getElementById("shortcutsTable").deleteRow(this.parentNode.rowIndex);
 }
 
+function importShortcuts() {
+   var input = $('#importExportArea').val();
+   var data = $.csv.toObjects(input);
+   buildShortcutsTable(data);
+}
+
+function exportShortcuts() {
+   var output = "";
+   var headerRow = true;
+
+   $('#shortcutsTable tr').each(function () {
+       if (!($(this).is(":first-child"))) {
+           output += "\n";
+       }
+
+       $.each(this.cells, function () {
+           if (headerRow || (!($(this).is(":last-child")))) {
+               if (!($(this).is(":first-child"))) {
+                   output += ",";
+               }
+               output += "\"" + $(this).html() + "\"";
+           }
+       });
+       headerRow = false;
+   });
+
+   $('#importExportArea').html(output);
+}
+
 document.getElementById("saveButton").addEventListener('click', saveOptions);
 document.addEventListener('DOMContentLoaded', function() {
    restoreOptions();
    document.getElementById("insertShortcutRowButton").addEventListener('click', insertShortcutRow);
+   document.getElementById("importButton").addEventListener('click', importShortcuts);
+   document.getElementById("exportButton").addEventListener('click', exportShortcuts);
 })
 ;
